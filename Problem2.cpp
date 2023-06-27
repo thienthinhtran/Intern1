@@ -42,7 +42,7 @@ int main() {
     while (std::getline(ss, substring, ',')) {
         substrings.push_back(substring);
     }
-
+    cout <<'[';
     unordered_map<string, vector<string>> ans = groupAnagrams(substrings);
     bool check1 = false;
     for (const auto& pair : ans) {
@@ -59,5 +59,6 @@ int main() {
         cout << ']';
     check1 = true;
     }
+    cout << ']';
     return 0;
 }
