@@ -11,13 +11,13 @@ unordered_map<string, vector<string>> groupAnagrams(vector<string>& strs) {
     unordered_map<string, vector<string>> anagramGroups;
 
     for (const auto& str : strs) {
-        string sortedStr = str;
+        //string sortedStr = str;
         // Sort sortedStr using counting sort
         int count[26] = {0};  // lowercase only
-        for (char ch : sortedStr) {
+        for (char ch : str) {
             count[ch - 'a']++;
         }
-        sortedStr = "";
+        string sortedStr = "";
         for (int i = 0; i < 26; i++) {
             sortedStr += string(count[i], i + 'a');
         }
@@ -44,8 +44,10 @@ int main() {
     }
 
     unordered_map<string, vector<string>> ans = groupAnagrams(substrings);
-
+    bool check1 = false;
     for (const auto& pair : ans) {
+        if(check1 == true)
+            cout << ',';
         bool check = false;
         cout << '[';
         for (const auto& str : pair.second) {
@@ -54,7 +56,8 @@ int main() {
             cout << str;
             check = true;
         }
-        cout << ']' << endl;
+        cout << ']';
+    check1 = true;
     }
     return 0;
 }
