@@ -1,70 +1,60 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include <algorithm>
-#include<sstream>
+#include <sstream>
 
 using namespace std;
 vector<string> strs;
 string s;
 
-vector<vector<string>> groupAnagrams(vector<string>& strs) {
+unordered_map<string, vector<string>> groupAnagrams(vector<string>& strs) {
     unordered_map<string, vector<string>> anagramGroups;
 
     for (const auto& str : strs) {
         string sortedStr = str;
-        sort(sortedStr.begin(), sortedStr.end());
+        // Sort sortedStr using counting sort
+        int count[26] = {0};  // lowercase only
+        for (char ch : sortedStr) {
+            count[ch - 'a']++;
+        }
+        sortedStr = "";
+        for (int i = 0; i < 26; i++) {
+            sortedStr += string(count[i], i + 'a');
+        }
+        // End of counting sort
+
         anagramGroups[sortedStr].push_back(str);
     }
-
-    vector<vector<string>> result;
-    for (const auto& pair : anagramGroups) {
-        result.push_back(pair.second);
-    }
-
-    return result;
+    return anagramGroups;
 }
 
 int main() {
-    //vector<string> strs = { "eat", "tea", "tan", "ate", "nat", "bat" };
     ios::sync_with_stdio(0);
     cin.tie(0);
     getline(cin, s);
-   // cout << s.length() << endl;
 
     s = s.substr(8, s.length() - 9);
-    //cout << "CHECK " << s<<endl;
 
-    //cout << "check " << "// " << s[s.length() - 1] << " ** " << s << endl;
-    //
     vector<std::string> substrings;
     stringstream ss(s);
     string substring;
 
     while (std::getline(ss, substring, ',')) {
         substrings.push_back(substring);
-       // cout << "sub " << substring << endl;
     }
 
-    //
-    vector<vector<string>> groupedAnagrams = groupAnagrams(substrings);
+    unordered_map<string, vector<string>> ans = groupAnagrams(substrings);
 
-    bool check = false;
-    cout << '[';
-    for (const auto& group : groupedAnagrams) {
-        if(check)
-            cout << ',';
+    for (const auto& pair : ans) {
+        bool check = false;
         cout << '[';
-        bool check1 = false;
-        for (const auto& str : group) {
-            if(check1)
+        for (const auto& str : pair.second) {
+            if(check)
                 cout << ',';
             cout << str;
-            check1 = true;
+            check = true;
         }
-        cout << ']';
-        check = true;
+        cout << ']' << endl;
     }
-    cout << ']';
     return 0;
 }
